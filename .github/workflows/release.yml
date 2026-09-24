@@ -1,0 +1,81 @@
+name: Release
+
+# Publishes a marketplace release: validate the exact commit, install every plugin from a
+# clean Claude Code config, then create the vX.Y.Z tag and GitHub Release.
+# Dispatched automatically by auto-release.yml after green CI on main, or run by hand.
+on:
+  workflow_dispatch:
+    inputs:
+      release_ref:
+        description: Exact commit/ref to release; automatic releases pass the CI-tested SHA
+        type: string
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clawmain-release
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.release_ref || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate catalog and release metadata
+        shell: bash
+        run: |
+          python tools/build.py --check
+          python tools/release_meta.py --check-bumps
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Smoke-test every plugin from a clean Claude config
+        env:
+          DISABLE_AUTOUPDATER: "1"
+        run: python scripts/smoke_plugins.py
+
+  github-release:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.release_ref || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Create or repair the GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ inputs.release_ref || github.sha }}
+        run: |
+          eval "$(python tools/release_meta.py)"   # sets version= and tag=
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "$tag already has a GitHub Release."
+            exit 0
+          fi
+          python tools/release_meta.py --notes > "$RUNNER_TEMP/notes.md"
+          if git rev-parse "$tag" >/dev/null 2>&1; then
+            gh release create "$tag" --verify-tag --title "clawmain $version" --notes-file "$RUNNER_TEMP/notes.md"
+          else
+            gh release create "$tag" --target "$RELEASE_SHA" --title "clawmain $version" --notes-file "$RUNNER_TEMP/notes.md"
+          fi

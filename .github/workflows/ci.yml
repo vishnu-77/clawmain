@@ -1,22 +1,49 @@
-name: ci
+name: CI
 
 on:
   push:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # tags are needed for the version-bump check
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Catalog valid and generated files up to date
         run: python tools/build.py --check
+      - name: Release metadata and version bumps
+        run: python tools/release_meta.py --check-bumps
       - name: Tests
         run: python -m unittest discover -s tests -v
-      - name: Manifests are valid JSON
-        run: |
-          python -c "import json,glob; [json.load(open(p)) for p in ['.claude-plugin/marketplace.json', *glob.glob('plugins/*/.claude-plugin/plugin.json')]]; print('ok')"
+
+  smoke:
+    name: plugin smoke · ${{ matrix.os }}
+    needs: check
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Install every plugin in an isolated Claude config and check what loads
+        env:
+          DISABLE_AUTOUPDATER: "1"
+        run: python scripts/smoke_plugins.py

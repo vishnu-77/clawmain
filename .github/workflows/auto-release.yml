@@ -1,0 +1,64 @@
+name: Auto Release
+
+# A successful CI run on main is the only automatic release trigger.
+# This workflow validates the CI-tested version and dispatches release.yml with that exact SHA.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: clawmain-auto-release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.release.outputs.should_release }}
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - name: Check out the exact CI-tested commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - id: version
+        name: Validate release metadata
+        run: python tools/release_meta.py --check-bumps >> "$GITHUB_OUTPUT"
+      - id: release
+        name: Check whether this version already has a GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            echo "$TAG is already released; nothing to publish."
+          else
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  dispatch:
+    needs: prepare
+    if: needs.prepare.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch the release workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          gh workflow run release.yml \
+            --repo "${{ github.repository }}" \
+            --ref main \
+            -f release_ref="$RELEASE_SHA"

@@ -61,5 +61,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ```
 python tools/build.py          # regenerate
 python tools/build.py --check  # CI: validate + staleness check
+python tools/bump.py <plugin> patch   # then add a CHANGELOG entry; green CI auto-releases
 python -m unittest discover -s tests
 ```

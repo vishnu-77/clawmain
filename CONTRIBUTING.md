@@ -41,7 +41,29 @@ the plugin to the marketplace automatically.
 - `steps` 3-8, `outputs` 1-8, `guardrails` 1-6.
 - `handoffs`: each `to` must be an existing agent, with a `when`.
 
-## Release
+## Release (same flow as OpenReflex)
 
-Tag releases `vX.Y.Z` so other marketplaces can pin `ref` in their `git-subdir`
-source (see [docs/other-marketplaces.md](docs/other-marketplaces.md)).
+1. Change catalog or plugin files.
+2. Bump: `python tools/bump.py <plugin> patch` (or `all minor`). This bumps the plugin,
+   bumps the marketplace version, and rebuilds.
+3. Add a `## X.Y.Z` section to `CHANGELOG.md` for the new marketplace version.
+4. Push to main. **CI** validates the catalog, the release metadata, and version bumps, runs
+   the tests, and smoke-tests every plugin in a real Claude Code CLI (Ubuntu + Windows).
+5. On green CI, **Auto Release** dispatches **Release** with the exact tested SHA. Release
+   repeats the smoke test on Ubuntu, macOS, and Windows, then creates the `vX.Y.Z` tag and
+   the GitHub Release, with notes taken from the changelog.
+
+CI fails if a plugin changed after its version was released without a bump, because
+Claude Code only offers an update when the version changes.
+
+Local checks before pushing:
+
+```
+python tools/build.py --check
+python tools/release_meta.py --check-bumps
+python -m unittest discover -s tests
+python scripts/smoke_plugins.py      # needs the claude CLI; uses an isolated config
+```
+
+Other marketplaces can pin a release with `ref: "vX.Y.Z"` in their `git-subdir` source
+(see [docs/other-marketplaces.md](docs/other-marketplaces.md)).
