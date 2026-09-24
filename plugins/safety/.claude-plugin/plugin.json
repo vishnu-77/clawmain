@@ -1,0 +1,18 @@
+{
+  "name": "safety",
+  "displayName": "Safety",
+  "version": "0.1.0",
+  "description": "Defensive safety for AI coding agents and what they build: secrets, dangerous commands, least-privilege permissions, prompt injection, PII, licenses, and supply chain.",
+  "author": {
+    "name": "vishnu-77",
+    "url": "https://github.com/vishnu-77"
+  },
+  "homepage": "https://github.com/vishnu-77/clawmain/tree/main/plugins/safety",
+  "repository": "https://github.com/vishnu-77/clawmain",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "clawmain",
+    "safety"
+  ]
+}

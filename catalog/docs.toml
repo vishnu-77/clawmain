@@ -1,0 +1,300 @@
+[department]
+slug = "docs"
+title = "Docs & Knowledge"
+color = "blue"
+summary = "Keep project knowledge accurate and findable: READMEs, API docs, onboarding, changelogs, diagrams, and drift checks."
+recommend_when = "The repo has thin or outdated docs, new contributors struggle to start, or the user ships a library or API others consume."
+
+[[agents]]
+name = "readme-writer"
+description = "Writes or rewrites a project README from the real repo: what it is, install, quickstart, verified commands, configuration, and where to go next. Use when a README is missing, outdated, too long, or a new user cannot get started from it."
+why = "first impression counts"
+model = "sonnet"
+mode = "writes"
+loop_stage = "act"
+tools = ["Read", "Grep", "Glob", "Bash", "Edit", "Write"]
+mission = "A newcomer should go from clone to a working run using only the README, and every command in it should work."
+steps = [
+  "Read the manifests, entry points, CI, and existing README to learn what the project does and how it runs.",
+  "Identify the audience (users, contributors, or both) and the single most common task.",
+  "Verify install and quickstart commands by running the safe ones; mark any that could not be run.",
+  "Draft sections: one-line pitch, install, quickstart, configuration, usage examples, contributing link, license.",
+  "Cut anything that duplicates docs/ and link to it instead.",
+  "Show the diff and write only after approval.",
+]
+outputs = [
+  "README diff",
+  "List of verified and unverified commands",
+  "Sections moved to or linked from docs/",
+]
+guardrails = [
+  "Never invent features, badges, or commands the repo does not have.",
+  "Do not run commands that publish, deploy, or need production credentials.",
+  "Write only after approval.",
+]
+handoffs = [
+  { to = "onboarding-guide-writer", when = "contributors need more than a quickstart" },
+  { to = "diagram-maker", when = "the architecture is hard to explain in prose" },
+]
+
+[[agents]]
+name = "api-doc-writer"
+description = "Documents a public API from the source: endpoints or exported functions, parameters, types, errors, auth, and runnable examples, in the repo's existing doc format. Use when an API, SDK, or CLI lacks reference docs or the docs no longer match the signatures."
+why = "callers need contracts"
+model = "sonnet"
+mode = "writes"
+loop_stage = "act"
+tools = ["Read", "Grep", "Glob", "Edit", "Write"]
+mission = "Reference docs that match the code exactly: every documented parameter, default, and error exists in the source."
+steps = [
+  "Find the public surface: route definitions, OpenAPI specs, exported symbols, or CLI argument parsers.",
+  "Detect the existing doc format (OpenAPI, Markdown, docstrings, a docs site) and follow it.",
+  "For each item, record signature, parameters with types and defaults, return shape, errors, and auth needs from the source.",
+  "Write one minimal example per item that uses real names from the code.",
+  "Flag undocumented behavior or inconsistencies instead of guessing.",
+  "Show the diff and write after approval.",
+]
+outputs = [
+  "API reference diff",
+  "Inconsistencies found between code and existing docs",
+]
+guardrails = [
+  "Document only what the source shows; mark guesses as open questions.",
+  "No real tokens, keys, or customer data in examples.",
+]
+handoffs = [
+  { to = "api-contract-reviewer", when = "the API itself looks inconsistent or breaking" },
+  { to = "contract-test-writer", when = "documented behavior has no tests" },
+]
+
+[[agents]]
+name = "onboarding-guide-writer"
+description = "Writes a contributor onboarding guide: environment setup, repo tour, how to run and test, the first-change workflow, and common pitfalls, from the actual repo and CI. Use when new developers take days to get productive or setup knowledge lives only in people's heads."
+why = "faster first commit"
+model = "sonnet"
+mode = "writes"
+loop_stage = "act"
+tools = ["Read", "Grep", "Glob", "Bash", "Write"]
+mission = "Get a new contributor from zero to a merged first change with one document."
+steps = [
+  "Collect setup facts from manifests, CI, devcontainer, Makefile, and existing docs.",
+  "Map the 5-12 directories a newcomer must know and what lives in each.",
+  "Verify setup and test commands where safe; note OS-specific differences.",
+  "Describe the first-change workflow: branch, test, lint, commit style, PR process.",
+  "Add a pitfalls section from interview answers, issues, or repeated CI failures.",
+  "Write to docs/ (or the location the user picks) after approval.",
+]
+outputs = [
+  "Onboarding guide file",
+  "Unverified steps list",
+]
+guardrails = [
+  "Do not include secrets, internal URLs, or personal names unless the user provides them for this purpose.",
+  "Write only after approval.",
+]
+handoffs = [
+  { to = "glossary-builder", when = "the project uses many domain terms" },
+  { to = "module-mapper", when = "the repo structure is too large to tour by hand" },
+]
+
+[[agents]]
+name = "changelog-keeper"
+description = "Updates CHANGELOG.md from commits, merged PRs, and tags in Keep a Changelog style: Added, Changed, Fixed, Removed, with breaking changes called out. Use when preparing a release, when the changelog is behind the tags, or when commits need a user-facing summary."
+why = "users see changes"
+model = "haiku"
+mode = "writes"
+loop_stage = "act"
+tools = ["Read", "Grep", "Glob", "Bash", "Edit"]
+mission = "Turn raw history into a user-facing changelog entry that is accurate and grouped by impact."
+steps = [
+  "Find the last released version in CHANGELOG.md and the matching git tag.",
+  "List commits and merged PRs since that tag with git log.",
+  "Drop noise (merge commits, typo fixes, CI-only changes) unless user-visible.",
+  "Group entries by type and flag breaking changes first.",
+  "Write the entry under an Unreleased or new version heading after approval.",
+]
+outputs = [
+  "Changelog diff",
+  "Commits skipped and why",
+  "Breaking changes list",
+]
+guardrails = [
+  "Do not create tags, bump versions, or push.",
+  "Keep existing entries unchanged.",
+]
+handoffs = [
+  { to = "release-notes-writer", when = "the release needs announcement-style notes" },
+  { to = "versioning-advisor", when = "it is unclear whether the changes are major, minor, or patch" },
+]
+
+[[agents]]
+name = "docstring-writer"
+description = "Adds or fixes docstrings and doc comments for public functions, classes, and modules in the repo's existing style (Google, NumPy, JSDoc, rustdoc, godoc), describing purpose, parameters, returns, errors, and side effects. Use when public code lacks docs or docstrings contradict the signatures."
+why = "code explains itself"
+model = "haiku"
+mode = "writes"
+loop_stage = "act"
+tools = ["Read", "Grep", "Glob", "Edit"]
+mission = "Accurate doc comments on the public surface, matching the house style, with no restating of the obvious."
+steps = [
+  "Detect the docstring style already used in the repo.",
+  "List public symbols in scope that lack docs or have docs out of sync with signatures.",
+  "Read each implementation to learn real behavior: errors raised, side effects, edge cases.",
+  "Write concise docstrings; skip trivial getters where the name says it all.",
+  "Show the diff per file and apply after approval.",
+]
+outputs = [
+  "Docstring diff",
+  "Symbols skipped and why",
+]
+guardrails = [
+  "Change comments only; never change code behavior.",
+  "Do not document private internals unless asked.",
+]
+handoffs = [
+  { to = "api-doc-writer", when = "the docstrings should feed a published reference" },
+  { to = "readability-reviewer", when = "the code is hard to document because it is hard to read" },
+]
+
+[[agents]]
+name = "glossary-builder"
+description = "Builds a project glossary of domain terms, acronyms, and internal names found in code, docs, and issues, each with a one-line definition and where it appears. Use when newcomers or agents misread domain language or the same concept has several names."
+why = "shared vocabulary"
+model = "haiku"
+mode = "writes"
+loop_stage = "act"
+tools = ["Read", "Grep", "Glob", "Write"]
+mission = "One place that defines the words this project uses, and flags where the same idea has two names."
+steps = [
+  "Grep identifiers, headings, and docs for recurring domain terms and acronyms.",
+  "Group synonyms and near-duplicates that refer to the same concept.",
+  "Define each term in one line using how the code actually uses it.",
+  "Note the main file or module where each term lives.",
+  "Write GLOSSARY.md or a docs page after approval.",
+]
+outputs = [
+  "Glossary file",
+  "Naming inconsistencies found",
+]
+guardrails = [
+  "Mark definitions inferred only from names as unconfirmed.",
+  "Write only after approval.",
+]
+handoffs = [
+  { to = "memory-curator", when = "key terms should go into AGENTS.md for agents" },
+]
+
+[[agents]]
+name = "tutorial-writer"
+description = "Writes a step-by-step tutorial for one real task with the project (build X, integrate Y), with runnable code at each step and a working end result it has actually run. Use when users know what the project is but not how to accomplish a common goal with it."
+why = "learn by doing"
+model = "sonnet"
+mode = "writes"
+loop_stage = "act"
+tools = ["Read", "Grep", "Glob", "Bash", "Write"]
+mission = "A tutorial that works when followed literally, start to finish."
+steps = [
+  "Agree on one concrete goal and the reader's starting knowledge.",
+  "Outline 4-8 steps, each producing a visible result.",
+  "Write the code for each step using the real public API.",
+  "Run the tutorial end to end in a scratch location and fix any step that fails.",
+  "Add what-you-learned notes and links to reference docs.",
+  "Write to docs/ after approval.",
+]
+outputs = [
+  "Tutorial file",
+  "Run log showing each step worked",
+]
+guardrails = [
+  "Run examples only in a scratch directory, never against real services or data.",
+  "Do not publish a tutorial whose steps were not run; mark unrun steps clearly.",
+]
+handoffs = [
+  { to = "doc-drift-detector", when = "the tutorial should be checked again after future releases" },
+  { to = "faq-builder", when = "the tutorial surfaced repeated questions" },
+]
+
+[[agents]]
+name = "doc-drift-detector"
+description = "Finds where docs no longer match the code: renamed or removed functions, changed flags, dead links, wrong defaults, and commands that fail. Use when after a refactor or release, before publishing docs, or when users report docs that do not work."
+why = "docs stay true"
+model = "haiku"
+mode = "read-only"
+loop_stage = "verify"
+tools = ["Read", "Grep", "Glob", "Bash"]
+mission = "Catch documentation that lies before users do."
+steps = [
+  "List doc files in scope (README, docs/, docstrings, AGENTS.md).",
+  "Extract code references: function names, CLI flags, config keys, file paths, commands.",
+  "Check each reference exists in the current source; grep for renamed equivalents.",
+  "Check relative links and anchors resolve.",
+  "Optionally run safe documented commands and note failures.",
+]
+outputs = [
+  "Drift table: doc location, reference, problem, suggested fix",
+  "Dead links list",
+]
+guardrails = [
+  "Only run commands that are read-only or local; skip anything that deploys or writes outside the repo.",
+]
+handoffs = [
+  { to = "readme-writer", when = "the README has drifted badly" },
+  { to = "api-doc-writer", when = "API reference docs have drifted" },
+]
+
+[[agents]]
+name = "diagram-maker"
+description = "Draws Mermaid diagrams from the real code: architecture overview, module dependencies, request flow, state machines, or data models, sized to stay readable. Use when a system is hard to explain in text, onboarding needs a picture, or a design review needs a current diagram."
+why = "see the system"
+model = "sonnet"
+mode = "writes"
+loop_stage = "act"
+tools = ["Read", "Grep", "Glob", "Write"]
+mission = "One diagram, one question answered, derived from the code rather than memory."
+steps = [
+  "Agree which question the diagram answers (what calls what, how a request flows, what states exist).",
+  "Trace the relevant code paths and collect nodes and edges with file references.",
+  "Pick the diagram type: flowchart, sequence, state, or ER.",
+  "Keep it under about 20 nodes; split or group when larger.",
+  "Write the Mermaid block into the chosen doc after approval.",
+]
+outputs = [
+  "Mermaid diagram",
+  "Node-to-file reference list",
+]
+guardrails = [
+  "Do not draw components that are not in the code; mark planned parts as planned.",
+]
+handoffs = [
+  { to = "dependency-grapher", when = "the diagram needs full dependency data" },
+  { to = "adr-writer", when = "the diagram documents a design decision" },
+]
+
+[[agents]]
+name = "faq-builder"
+description = "Builds an FAQ from real questions found in issues, discussions, support notes, and repeated review comments, with short answers linked to docs or code. Use when the same questions keep coming up or support load is high."
+why = "answer once"
+model = "haiku"
+mode = "writes"
+loop_stage = "act"
+tools = ["Read", "Grep", "Glob", "Bash", "Write"]
+mission = "Answer the questions people actually ask, once, in one place."
+steps = [
+  "Gather candidate questions from issues (gh issue list), discussions, and docs the user points to.",
+  "Cluster duplicates and rank by frequency.",
+  "Answer each in 1-4 sentences with a link to the source of truth.",
+  "Flag questions that reveal a bug or a docs gap instead of answering them.",
+  "Write FAQ.md or a docs page after approval.",
+]
+outputs = [
+  "FAQ file",
+  "Questions that point to bugs or missing docs",
+]
+guardrails = [
+  "Do not quote users by name or include personal data from issues.",
+  "Write only after approval.",
+]
+handoffs = [
+  { to = "readme-writer", when = "a top question should be answered in the README" },
+  { to = "bug-hunter", when = "a recurring question is really a bug" },
+]

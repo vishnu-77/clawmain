@@ -6,16 +6,143 @@
   },
   "metadata": {
     "description": "Claude Code plugins by vishnu-77.",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "plugins": [
     {
       "name": "groundwork",
       "source": "./plugins/groundwork",
       "description": "Guided Claude Code setup: verified AGENTS.md, CLAUDE.md and skills, with a short 'why' lesson on every choice.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "category": "productivity",
-      "keywords": ["setup", "agents-md", "claude-md", "skills", "onboarding"]
+      "keywords": [
+        "setup",
+        "agents-md",
+        "claude-md",
+        "skills",
+        "onboarding"
+      ]
+    },
+    {
+      "name": "agent-ops",
+      "source": "./plugins/agent-ops",
+      "description": "Run agents as a disciplined loop: plan, verify, reflect, budget, route handoffs, and learn from failures.",
+      "version": "0.1.0",
+      "category": "agents",
+      "keywords": [
+        "agents",
+        "agent-ops"
+      ]
+    },
+    {
+      "name": "ai-engineering",
+      "source": "./plugins/ai-engineering",
+      "description": "Build LLM-powered product features that hold up: evals, prompts, RAG, tool schemas, guardrails, cost, and context design.",
+      "version": "0.1.0",
+      "category": "agents",
+      "keywords": [
+        "agents",
+        "ai-engineering"
+      ]
+    },
+    {
+      "name": "architecture",
+      "source": "./plugins/architecture",
+      "description": "Map, protect, and evolve the structure of a codebase: modules, dependencies, boundaries, interfaces, data models, and migrations.",
+      "version": "0.1.0",
+      "category": "agents",
+      "keywords": [
+        "agents",
+        "architecture"
+      ]
+    },
+    {
+      "name": "code-review",
+      "source": "./plugins/code-review",
+      "description": "Focused review lenses for diffs and PRs: each agent checks one concern and returns file:line findings with severity.",
+      "version": "0.1.0",
+      "category": "agents",
+      "keywords": [
+        "agents",
+        "code-review"
+      ]
+    },
+    {
+      "name": "devops",
+      "source": "./plugins/devops",
+      "description": "Keep CI green and fast, ship releases safely, and run production with good configs, containers, observability, and cost control.",
+      "version": "0.1.0",
+      "category": "agents",
+      "keywords": [
+        "agents",
+        "devops"
+      ]
+    },
+    {
+      "name": "docs",
+      "source": "./plugins/docs",
+      "description": "Keep project knowledge accurate and findable: READMEs, API docs, onboarding, changelogs, diagrams, and drift checks.",
+      "version": "0.1.0",
+      "category": "agents",
+      "keywords": [
+        "agents",
+        "docs"
+      ]
+    },
+    {
+      "name": "explainable-ai",
+      "source": "./plugins/explainable-ai",
+      "description": "Make agent work and AI features explainable: why a change was made, what proves it, which assumptions, how confident, and what was rejected.",
+      "version": "0.1.0",
+      "category": "agents",
+      "keywords": [
+        "agents",
+        "explainable-ai"
+      ]
+    },
+    {
+      "name": "quality",
+      "source": "./plugins/quality",
+      "description": "Test strategy and test writing: find gaps, kill flakes, lock regressions, and prove tests actually catch bugs.",
+      "version": "0.1.0",
+      "category": "agents",
+      "keywords": [
+        "agents",
+        "quality"
+      ]
+    },
+    {
+      "name": "risk-reward",
+      "source": "./plugins/risk-reward",
+      "description": "Weigh the risk of a change against its reward before shipping: explicit risk scores, blast radius, reversibility, rollback plans, and go/no-go gates.",
+      "version": "0.1.0",
+      "category": "agents",
+      "keywords": [
+        "agents",
+        "risk-reward"
+      ]
+    },
+    {
+      "name": "safety",
+      "source": "./plugins/safety",
+      "description": "Defensive safety for AI coding agents and what they build: secrets, dangerous commands, least-privilege permissions, prompt injection, PII, licenses, and supply chain.",
+      "version": "0.1.0",
+      "category": "agents",
+      "keywords": [
+        "agents",
+        "safety"
+      ]
+    },
+    {
+      "name": "token-economy",
+      "source": "./plugins/token-economy",
+      "description": "Spend fewer tokens per task without losing correctness: narrow reads, cache-friendly prompts, compact diffs, logs and outputs, and cheaper models where they are good enough.",
+      "version": "0.1.0",
+      "category": "agents",
+      "keywords": [
+        "agents",
+        "token-economy"
+      ]
     }
   ]
 }

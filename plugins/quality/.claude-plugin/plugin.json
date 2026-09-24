@@ -1,0 +1,18 @@
+{
+  "name": "quality",
+  "displayName": "Quality",
+  "version": "0.1.0",
+  "description": "Test strategy and test writing: find gaps, kill flakes, lock regressions, and prove tests actually catch bugs.",
+  "author": {
+    "name": "vishnu-77",
+    "url": "https://github.com/vishnu-77"
+  },
+  "homepage": "https://github.com/vishnu-77/clawmain/tree/main/plugins/quality",
+  "repository": "https://github.com/vishnu-77/clawmain",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "clawmain",
+    "quality"
+  ]
+}

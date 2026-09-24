@@ -108,4 +108,7 @@ End with:
 - A 3-line **"What you learned"** recap: the three most important why-tags from this run.
 - Up to 2 suggested skills, based on workflows spotted in CI, the README, or interview
   answers (e.g. release, add a migration). Offer `/groundwork:skill <name>`.
+- Up to 3 recommended agent departments from `references/agent-catalog.md`, matched
+  against the repo profile and interview answers, each with a why-tag and its install
+  command, e.g. `safety → Why: avoids costly mistakes`. Recommend nothing if nothing fits.
 - A reminder that `/groundwork:audit` can check the setup again later.

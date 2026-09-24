@@ -1,0 +1,18 @@
+{
+  "name": "devops",
+  "displayName": "DevOps & Release",
+  "version": "0.1.0",
+  "description": "Keep CI green and fast, ship releases safely, and run production with good configs, containers, observability, and cost control.",
+  "author": {
+    "name": "vishnu-77",
+    "url": "https://github.com/vishnu-77"
+  },
+  "homepage": "https://github.com/vishnu-77/clawmain/tree/main/plugins/devops",
+  "repository": "https://github.com/vishnu-77/clawmain",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "clawmain",
+    "devops"
+  ]
+}

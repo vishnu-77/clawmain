@@ -1,0 +1,18 @@
+{
+  "name": "risk-reward",
+  "displayName": "Risk & Reward",
+  "version": "0.1.0",
+  "description": "Weigh the risk of a change against its reward before shipping: explicit risk scores, blast radius, reversibility, rollback plans, and go/no-go gates.",
+  "author": {
+    "name": "vishnu-77",
+    "url": "https://github.com/vishnu-77"
+  },
+  "homepage": "https://github.com/vishnu-77/clawmain/tree/main/plugins/risk-reward",
+  "repository": "https://github.com/vishnu-77/clawmain",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "clawmain",
+    "risk-reward"
+  ]
+}
