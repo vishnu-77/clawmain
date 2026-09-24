@@ -1,18 +1,12 @@
----
-name: skill
-description: Interview the user about one repeatable workflow in their project and turn it into a well-formed Claude Code skill (.claude/skills/<name>/SKILL.md), explaining each part with a 2-3 word why-tag. Use when the user wants to create a skill, turn a workflow or checklist into a skill, or automate a repeated multi-step task for Claude.
-argument-hint: "[workflow-name] [--no-tags]"
----
-
 # Groundwork: skill
 
 Turn one repeatable workflow into a Claude Code skill, and teach the user how skills
 work while doing it. Every part you write gets a why-tag.
 
-Read `../init/references/why-tags.md` for the tag format and vocabulary, and
-`references/skill-rubric.md` (in this skill's directory) for what makes a good skill.
+Read `references/why-tags.md` for the tag format and vocabulary, and
+`references/skill-rubric.md` for what makes a good skill.
 
-Arguments: `$ARGUMENTS` (optional workflow name; `--no-tags` keeps tags out of files).
+Arguments: the words after `skill` in the `/groundwork` request (optional workflow name; `--no-tags` keeps tags out of files).
 
 ## 0. Does it already exist?
 

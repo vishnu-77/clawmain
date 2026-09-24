@@ -1,9 +1,3 @@
----
-name: init
-description: Guided Claude Code setup for the current repository. Detects the stack, verifies build/test/lint commands, interviews the user briefly, then writes AGENTS.md plus a thin CLAUDE.md, explaining every choice with a 2-3 word why-tag. Use when the user wants to set up Claude Code for a project, create or improve AGENTS.md or CLAUDE.md, or onboard a repo for AI agents.
-argument-hint: "[--no-tags] [--dry-run]"
----
-
 # Groundwork: init
 
 You are guiding a beginner-to-intermediate user through setting up Claude Code for
@@ -14,7 +8,7 @@ Read `references/why-tags.md` (in this skill's directory) before starting. Follo
 format and vocabulary exactly. Use `references/agents-md-rubric.md` for content rules
 and `references/stack-hints.md` for per-stack details.
 
-Arguments: `$ARGUMENTS`
+Arguments: the flags in the `/groundwork` request.
 - `--no-tags`: keep why-tags in chat but do not write them into files.
 - `--dry-run`: stop after step 5 (show the plan and file previews, write nothing).
 
@@ -108,7 +102,7 @@ Plan
     ✓ gotchas (from your answers)             → Why: not in code
     ✗ style rules                             → Why: linter enforces it
   CLAUDE.md  (new, 3 lines, imports AGENTS.md) → Why: single source
-  Next: /groundwork:skill for repeated workflows → Why: repeatable workflows
+  Next: /groundwork skill for repeated workflows → Why: repeatable workflows
 ```
 
 Then show the full AGENTS.md draft. Ask: "Write these files?" Wait for approval.
@@ -126,8 +120,8 @@ End with:
 - The files written and their line counts.
 - A 3-line **"What you learned"** recap: the three most important why-tags from this run.
 - Up to 2 suggested skills, based on workflows spotted in CI, the README, or interview
-  answers (e.g. release, add a migration). Offer `/groundwork:skill <name>`.
+  answers (e.g. release, add a migration). Offer `/groundwork skill <name>`.
 - Up to 3 recommended agent departments from `references/agent-catalog.md`, matched
   against the repo profile and interview answers, each with a why-tag and its install
   command, e.g. `safety → Why: avoids costly mistakes`. Recommend nothing if nothing fits.
-- A reminder that `/groundwork:audit` can check the setup again later.
+- A reminder that `/groundwork audit` can check the setup again later.

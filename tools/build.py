@@ -8,7 +8,7 @@ Generates, for every department file in catalog/:
 and repo-wide:
   .claude-plugin/marketplace.json         (department entries; other entries kept)
   docs/catalog.md, docs/graph.md, docs/other-marketplaces.md
-  plugins/groundwork/skills/init/references/agent-catalog.md
+  plugins/groundwork/skills/groundwork/references/agent-catalog.md
 
 Usage:
   python tools/build.py           write generated files
@@ -367,7 +367,7 @@ def render_groundwork_catalog(departments: list[dict]) -> str:
         "",
         "# clawmain agent departments",
         "",
-        "Use this to recommend agent plugins at the end of `/groundwork:init`. Recommend at most 3 "
+        "Use this to recommend agent plugins at the end of `/groundwork` (init). Recommend at most 3 "
         "departments, matched to the repo profile and the user's answers. Give each a why-tag.",
         "",
         f"Install: `/plugin install <slug>@{MARKETPLACE}` (after `/plugin marketplace add vishnu-77/{MARKETPLACE}`).",
@@ -403,7 +403,7 @@ def build() -> dict[Path, str]:
     outputs[ROOT / "docs" / "catalog.md"] = render_catalog_doc(departments)
     outputs[ROOT / "docs" / "graph.md"] = render_graph_doc(departments, owner)
     outputs[ROOT / "docs" / "other-marketplaces.md"] = render_other_marketplaces(departments)
-    outputs[ROOT / "plugins" / "groundwork" / "skills" / "init" / "references" / "agent-catalog.md"] = (
+    outputs[ROOT / "plugins" / "groundwork" / "skills" / "groundwork" / "references" / "agent-catalog.md"] = (
         render_groundwork_catalog(departments)
     )
     return outputs

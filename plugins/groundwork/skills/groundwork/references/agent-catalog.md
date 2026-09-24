@@ -2,7 +2,7 @@
 
 # clawmain agent departments
 
-Use this to recommend agent plugins at the end of `/groundwork:init`. Recommend at most 3 departments, matched to the repo profile and the user's answers. Give each a why-tag.
+Use this to recommend agent plugins at the end of `/groundwork` (init). Recommend at most 3 departments, matched to the repo profile and the user's answers. Give each a why-tag.
 
 Install: `/plugin install <slug>@clawmain` (after `/plugin marketplace add vishnu-77/clawmain`).
 

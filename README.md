@@ -9,7 +9,7 @@ plugins. Every agent runs the same evidence-first [loop harness](docs/loop-harne
 /plugin install groundwork@clawmain
 ```
 
-Start with `/groundwork:init` in your repo. It sets up AGENTS.md and CLAUDE.md, teaching a
+Start with `/groundwork` in your repo. It sets up AGENTS.md and CLAUDE.md, teaching a
 2-3 word lesson for each choice, and recommends which agent departments fit your project.
 
 ## Plugins

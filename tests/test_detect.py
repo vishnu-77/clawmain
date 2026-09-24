@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-DETECT = Path(__file__).resolve().parents[1] / "plugins/groundwork/skills/init/scripts/detect.py"
+DETECT = Path(__file__).resolve().parents[1] / "plugins/groundwork/skills/groundwork/scripts/detect.py"
 spec = importlib.util.spec_from_file_location("detect", DETECT)
 detect = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(detect)

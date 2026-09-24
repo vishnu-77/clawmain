@@ -3,6 +3,15 @@
 Versions are the marketplace version (`metadata.version` in `.claude-plugin/marketplace.json`).
 Each plugin also has its own version; see the plugin table in each entry.
 
+## 0.2.2
+
+- Groundwork 0.3.0: one command, `/groundwork`, like `/openreflex`.
+  `/groundwork` sets up or refreshes (safe to re-run), `/groundwork skill <name>` creates a
+  skill, `/groundwork audit [--fix]` grades the setup. The old `/groundwork:init`,
+  `/groundwork:skill` and `/groundwork:audit` commands are removed.
+- Procedures load on demand from one skill (always-on cost ~277 -> ~108 tokens).
+- The skill runs only when `/groundwork` is typed (`disable-model-invocation`, like OpenReflex).
+
 ## 0.2.1
 
 - Groundwork 0.2.1: idempotent re-runs, verified end to end in a live Claude Code session

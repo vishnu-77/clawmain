@@ -1,24 +1,18 @@
----
-name: audit
-description: Review the existing Claude Code setup in this repository (AGENTS.md, CLAUDE.md, .claude/skills) for bloat, vague or contradictory rules, stale or broken commands, and weak skill descriptions, and give a graded report where every finding carries a 2-3 word why-tag. Use when the user asks to check, review, audit, or improve their CLAUDE.md, AGENTS.md, or skills.
-argument-hint: "[--fix]"
----
-
 # Groundwork: audit
 
 Grade the repo's current agent setup and teach the user what to improve. Read-only
 unless the user passes `--fix` or approves fixes at the end.
 
-Read `../init/references/why-tags.md`, `../init/references/agents-md-rubric.md`,
-and `../skill/references/skill-rubric.md` first.
+Read `references/why-tags.md`, `references/agents-md-rubric.md`,
+and `references/skill-rubric.md` first.
 
-Arguments: `$ARGUMENTS`
+Arguments: the flags in the `/groundwork` request.
 
 ## 1. Collect
 
-Run `python ../init/scripts/detect.py <repo_root>` (from this skill's directory) and read
+Run `python "<this skill's base directory>/scripts/detect.py" "<repo_root>"` as one plain command and read
 every file listed in `existing_agent_config`: AGENTS.md, CLAUDE.md, CLAUDE.local.md,
-each `.claude/skills/*/SKILL.md`. If nothing exists, say so and offer `/groundwork:init`.
+each `.claude/skills/*/SKILL.md`. If nothing exists, say so and offer `/groundwork`.
 
 ## 2. Check
 

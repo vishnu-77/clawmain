@@ -1,7 +1,7 @@
 {
   "name": "groundwork",
   "displayName": "Groundwork",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Guided Claude Code setup: verified AGENTS.md, CLAUDE.md and skills, with a short 'why' lesson on every choice.",
   "author": {
     "name": "vishnu-77",

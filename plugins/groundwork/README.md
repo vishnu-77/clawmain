@@ -17,14 +17,16 @@ Every choice comes with a 2-3 word lesson:
 
 ## Commands
 
+One command: `/groundwork`.
+
 | Command | What it does |
 |---|---|
-| `/groundwork:init` | Detect, verify, interview, then write AGENTS.md + CLAUDE.md |
-| `/groundwork:skill [name]` | Turn a repeated workflow into `.claude/skills/<name>/SKILL.md` |
-| `/groundwork:audit [--fix]` | Grade your existing setup and suggest fixes |
+| `/groundwork` | First setup: detect, verify, interview, write AGENTS.md + CLAUDE.md. Safe to re-run: with no new facts it writes nothing |
+| `/groundwork skill <name>` | Turn a repeated workflow into `.claude/skills/<name>/SKILL.md` (reuses an existing skill instead of duplicating it) |
+| `/groundwork audit [--fix]` | Grade your existing setup and suggest fixes |
 
-Flags: `--no-tags` keeps lessons in chat but out of files; `--dry-run` (init) shows the
-plan without writing.
+Flags: `--no-tags` keeps lessons in chat but out of files; `--dry-run` shows the plan
+without writing.
 
 ## Install
 
