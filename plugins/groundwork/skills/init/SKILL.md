@@ -23,10 +23,11 @@ a plan to approve, then files. Nothing is written without their approval.
 
 ## 1. Detect
 
-Run the detector from this skill's directory against the repo root:
+Run the detector as one plain command, using the absolute path of this skill's base
+directory. Do not `cd` first and do not chain it with other commands:
 
 ```
-python scripts/detect.py <repo_root>
+python "<this skill's base directory>/scripts/detect.py" "<repo_root>"
 ```
 
 (Use `python3` if `python` is unavailable. If neither works, detect by reading
@@ -45,10 +46,13 @@ install, build, test, single test, lint, format, run.
 
 - **Ask once** before running anything: list the commands and ask "OK to run these to
   check they work?" Skip `install` and `run`/`dev` (long-running) unless the user agrees.
-- Run each approved command. Record: passed / failed / skipped, and rough duration.
+- Run each approved command exactly as it will appear in AGENTS.md, one command per
+  Bash call, with no `time`, loops, redirects, or wrapper functions (they trigger extra
+  permission prompts). Record passed / failed / skipped; note only whether it felt slow
+  (over about a minute).
 - Never run anything that deploys, publishes, deletes data, or needs production credentials.
 - Report results with tags, e.g.
-  `✓ pnpm test (38 s)   → Why: agents verify work`
+  `✓ pnpm test          → Why: agents verify work`
   `✗ make lint failed   → Why: unverified, omitted`
 
 Only verified commands go into AGENTS.md as plain commands. Failed or skipped ones are
@@ -75,6 +79,21 @@ and the code does not show.
 - **CLAUDE.md exists with real content:** do not overwrite. Propose moving shared
   content to AGENTS.md and leaving `@AGENTS.md` plus Claude-specific notes.
 - **Neither exists:** create both.
+
+### Re-run rules (idempotency)
+
+A re-run with no new facts must change **nothing**, byte for byte.
+
+- Compare facts, not wording. If a managed section's facts are unchanged, keep its
+  existing text exactly, even if you would phrase it differently today.
+- Change a managed section only for a real fact change: a command added, removed, or now
+  failing; a path moved; a new answer from the user. Edit that section in place.
+- Never add a second copy of a section, heading, marker pair, rule, or `@AGENTS.md` line.
+  Before adding a rule, check whether it already exists in any section, including user
+  sections outside markers; if so, leave it.
+- Never write volatile details (timings, dates, counts that drift, machine paths).
+- If nothing changed, say "unchanged" in the plan, write nothing, and skip step 6.
+- Tag: `keeps your edits` for preserved user content, `safe regeneration` for markers.
 
 ## 5. Propose the plan
 

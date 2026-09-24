@@ -41,6 +41,8 @@ a 2-3 word reason that teaches the user what the item is for.
 | Skipped: info obvious from code | agent can read |
 | Skipped: unverified command | unverified, omitted |
 | Skipped: one-off task as skill | not repeated |
+| Existing skill updated instead of new one | no duplicate skills |
+| Re-run found nothing to change | unchanged, nothing written |
 | Merged with existing file | keeps your edits |
 | Managed markers | safe regeneration |
 

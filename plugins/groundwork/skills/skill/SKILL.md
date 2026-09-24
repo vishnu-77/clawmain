@@ -14,6 +14,16 @@ Read `../init/references/why-tags.md` for the tag format and vocabulary, and
 
 Arguments: `$ARGUMENTS` (optional workflow name; `--no-tags` keeps tags out of files).
 
+## 0. Does it already exist?
+
+List `.claude/skills/*/SKILL.md` and read each `name` and `description`.
+
+- **Same name, or same workflow under another name:** do not create a new skill. Offer to
+  update the existing one in place, showing a diff. `→ Why: no duplicate skills`
+- **Nothing to change** after the interview: say "unchanged" and write nothing.
+- Never create variants such as `release-2` or `release-new`.
+- If the workflow is already fully covered by a line in AGENTS.md, say so instead.
+
 ## 1. Is this a skill?
 
 A skill is worth it when the workflow is **repeated**, has **several steps**, and the

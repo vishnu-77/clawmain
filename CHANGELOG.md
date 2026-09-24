@@ -3,6 +3,17 @@
 Versions are the marketplace version (`metadata.version` in `.claude-plugin/marketplace.json`).
 Each plugin also has its own version; see the plugin table in each entry.
 
+## 0.2.1
+
+- Groundwork 0.2.1: idempotent re-runs, verified end to end in a live Claude Code session
+  (re-run with no new facts writes nothing; new facts update the existing section in place;
+  user edits outside markers are kept).
+- `init` no longer writes timings or other volatile details into AGENTS.md.
+- `init` runs the detector and each verified command as single plain commands, avoiding
+  extra permission prompts.
+- `skill` checks existing skills by name and purpose and updates in place instead of
+  creating duplicates.
+
 ## 0.2.0
 
 - 11 department plugins with 111 agents, generated from `catalog/*.toml` by `tools/build.py`.

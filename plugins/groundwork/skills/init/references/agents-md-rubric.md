@@ -7,7 +7,8 @@ Aim for **40-120 lines**. Shorter is better if nothing important is lost.
 
 1. **One-line project summary.** What this is, in plain words.
 2. **Commands**, verified only: install, build, test, single test, lint/format, run.
-   Give the exact command and working directory. Note slow ones (> 60 s).
+   Give the exact command and working directory. Mark a command `(slow)` only if it
+   takes over about a minute. Never write exact timings: they drift and cause churn.
 3. **Project map.** 5-12 key directories/files with a few words each. Not a full tree.
 4. **Conventions that are NOT obvious from the code**: naming rules, where new code goes,
    error-handling style, commit message format, branch rules.
