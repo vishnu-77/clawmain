@@ -1,0 +1,21 @@
+{
+  "name": "clawmain",
+  "owner": {
+    "name": "vishnu-77",
+    "url": "https://github.com/vishnu-77"
+  },
+  "metadata": {
+    "description": "Claude Code plugins by vishnu-77.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "groundwork",
+      "source": "./plugins/groundwork",
+      "description": "Guided Claude Code setup: verified AGENTS.md, CLAUDE.md and skills, with a short 'why' lesson on every choice.",
+      "version": "0.1.0",
+      "category": "productivity",
+      "keywords": ["setup", "agents-md", "claude-md", "skills", "onboarding"]
+    }
+  ]
+}
